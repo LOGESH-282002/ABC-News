@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>News Website</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>ABC News</h1>
+    </header>
+    <nav>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="world.html">World</a>
+        <a href="politics.html">Politics</a>
+        <a href="business.html">Business</a>
+        <a href="technology.html">Technology</a>
+        <a href="sports.html">Sports</a>
+        <a href="entertainment.html">Entertainment</a>
+      </div>
+      <div class="nav-right">
+        <input class="search" type="search" placeholder="Search...">
+        <div class="user-lists">
+          <button class="list-btn" id="liked-btn">👍 Liked</button>
+          <button class="list-btn" id="disliked-btn">👎 Disliked</button>
+          <button class="list-btn" id="favorites-btn">⭐ Favorites</button>
+        </div>
+      </div>
+    </nav>
+    <main>
+      <div class="news-card" id="news-card-template" style="display:none">
+        <img src="" id="news-img">
+        <div class="news-card-content">
+          <h3 id="news-title"></h3>
+          <p id="news-desc"></p>
+          <h6 id="news-source"></h6>
+          <div class="card-actions">
+            <button class="action-btn like-btn" data-action="like">
+              <span class="icon">👍</span>
+              <span class="count">0</span>
+            </button>
+            <button class="action-btn dislike-btn" data-action="dislike">
+              <span class="icon">👎</span>
+              <span class="count">0</span>
+            </button>
+            <button class="action-btn favorite-btn" data-action="favorite">
+              <span class="icon">⭐</span>
+            </button>
+          </div>
+          <a href="#" id="news-link" target="_blank">Read More</a>
+        </div>
+      </div>
+      <div class="card-container" id="card-container"></div>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
