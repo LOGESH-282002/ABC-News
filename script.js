@@ -1,4 +1,4 @@
-const API_KEY = "3b8e578f3f8a51acee409495fcc8654a";
+const API_KEY = "c31036ddf4fb34e72af8a900e7f8c73f";
 
 function debounce(func, wait) {
     let timeout;
@@ -16,11 +16,11 @@ function getDefaultSearchTerm() {
     const page = window.location.pathname.split('/').pop();
     const pageMap = {
         'world.html': 'world',
-        'politics.html': 'politics',
-        'business.html': 'business',
+        'politics.html': 'Indian politics',
+        'business.html': 'Indian business',
         'technology.html': 'technology',
         'sports.html': 'India sports',
-        'entertainment.html': 'entertainment'
+        'entertainment.html': 'Indian entertainment'
     };
     return pageMap[page] || 'india';
 }
@@ -121,7 +121,10 @@ function updateListCounts() {
     document.getElementById('favorites-btn').textContent = `⭐ Favorites (${favoritesCount})`;
 }
 
+let currentListType = null;
+
 function backToNews() {
+    currentListType = null;
     document.querySelectorAll('.list-btn').forEach(btn => btn.classList.remove('active'));
     const searchInput = document.querySelector('input.search');
     if (searchInput) {
@@ -132,6 +135,7 @@ function backToNews() {
 }
 
 function showUserList(listType) {
+    currentListType = listType; 
     document.querySelectorAll('.list-btn').forEach(btn => btn.classList.remove('active'));
     document.getElementById(`${listType}-btn`).classList.add('active');
     const searchInput = document.querySelector('input.search');
@@ -172,7 +176,6 @@ function getUserListArticles(listType) {
                     }
                 }
             } catch (error) {
-                // Silently skip invalid entries
             }
         }
     });
@@ -256,7 +259,6 @@ function bindData(articles) {
             fillDataInCard(cardClone, article);
             cardContainer.appendChild(cardClone);
         } catch (error) {
-            // Skip problematic articles
         }
     });
 }
@@ -348,12 +350,13 @@ function updateButtonState(button, count, isActive) {
 
 function handleAction(articleId, action, primaryBtn, secondaryBtn = null, articleData = null) {
     const state = getArticleState(articleId);
-    
+    let removedFromList = false;
     switch (action) {
         case 'like':
             if (state.userLiked) {
                 state.likes--;
                 state.userLiked = false;
+                removedFromList = currentListType === 'liked';
             } else {
                 state.likes++;
                 state.userLiked = true;
@@ -366,11 +369,11 @@ function handleAction(articleId, action, primaryBtn, secondaryBtn = null, articl
                 }
             }
             break;
-            
         case 'dislike':
             if (state.userDisliked) {
                 state.dislikes--;
                 state.userDisliked = false;
+                removedFromList = currentListType === 'disliked';
             } else {
                 state.dislikes++;
                 state.userDisliked = true;
@@ -383,14 +386,14 @@ function handleAction(articleId, action, primaryBtn, secondaryBtn = null, articl
                 }
             }
             break;
-            
         case 'favorite':
             state.userFavorited = !state.userFavorited;
+            if (!state.userFavorited && currentListType === 'favorites') {
+                removedFromList = true;
+            }
             break;
     }
-    
     saveArticleState(articleId, state, articleData);
-    
     if (action === 'like') {
         updateButtonState(primaryBtn, state.likes, state.userLiked);
     } else if (action === 'dislike') {
@@ -398,9 +401,11 @@ function handleAction(articleId, action, primaryBtn, secondaryBtn = null, articl
     } else if (action === 'favorite') {
         updateButtonState(primaryBtn, null, state.userFavorited);
     }
-    
     updateListCounts();
     showActionFeedback(action, state);
+    if (removedFromList && currentListType) {
+        showUserList(currentListType);
+    }
 }
 
 function showActionFeedback(action, state) {
