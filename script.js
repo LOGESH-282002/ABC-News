@@ -1,4 +1,4 @@
-const API_KEY = "c31036ddf4fb34e72af8a900e7f8c73f";
+const API_KEY = "7f7315658be458e00fe0dc42d13e0530";
 
 function debounce(func, wait) {
     let timeout;
