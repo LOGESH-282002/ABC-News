@@ -365,12 +365,6 @@ footer {
   }
 }
 
-@media (min-width: 1200px) {
-  .card-container {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 @media (min-width: 900px) and (max-width: 1333px) {
   nav {
     padding: 1rem 0.5rem;
